@@ -1,38 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-export default function EditProfile() {
-  const [userName, setUserName] = useState("");
-  const [userBio, setUserBio] = useState("");
+export default function EditProfile({ currentUser, onUpdateUser }) {
+  const [name, setName] = useState(currentUser.name);
+  const [about, setAbout] = useState(currentUser.about);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Nombre:", userName, "Bio:", userBio);
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    onUpdateUser({ name, about });
+  }
 
   return (
-    <form className="popup__form" onSubmit={handleSubmit}>
-      <label className="popup__field">
-        <input
-          className="popup__input popup__input_type_name"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Nombre"
-          required
-          type="text"
-        />
-        <span className="popup__error" id="name-error"></span>
-      </label>
-      <label className="popup__field">
-        <textarea
-          className="popup__input popup__input_type_bio"
-          value={userBio}
-          onChange={(e) => setUserBio(e.target.value)}
-          placeholder="Acerca de mí"
-          required
-        />
-        <span className="popup__error" id="bio-error"></span>
-      </label>
-      <button className="button popup__button" type="submit">
+    <form className="form" onSubmit={handleSubmit}>
+      <input
+        className="form__input"
+        minLength="2"
+        maxLength="40"
+        required
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <span className="form__input-error"></span>
+
+      <input
+        className="form__input"
+        minLength="2"
+        maxLength="200"
+        required
+        value={about}
+        onChange={(e) => setAbout(e.target.value)}
+      />
+      <span className="form__input-error"></span>
+
+      <button className="form__submit" type="submit">
         Guardar
       </button>
     </form>

@@ -1,12 +1,11 @@
 import React from "react";
-import './index.css';
-import Header from './components/header/header.jsx';
-import Main from './components/main/main.jsx';
-import Footer from './components/footer/footer.jsx';
+import Header from "./components/header/header";
+import Main from "./components/main/main";
+import Footer from "./components/footer/footer";
 
 function App() {
   return (
-    <div className="page__content">
+    <div className="page">
       <Header />
       <Main />
       <Footer />

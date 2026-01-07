@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-export default function EditAvatar() {
-  const [avatarUrl, setAvatarUrl] = useState("");
+export default function EditAvatar({ onUpdateAvatar }) {
+  const [avatar, setAvatar] = useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Avatar URL:", avatarUrl);
-  };
+  function handleSubmit(e) {
+    e.preventDefault();
+    onUpdateAvatar(avatar);
+  }
 
   return (
-    <form className="popup__form" onSubmit={handleSubmit}>
-      <label className="popup__field">
-        <input
-          className="popup__input popup__input_type_url"
-          value={avatarUrl}
-          onChange={(e) => setAvatarUrl(e.target.value)}
-          placeholder="URL de la imagen"
-          required
-          type="url"
-        />
-        <span className="popup__error" id="avatar-error"></span>
-      </label>
-      <button className="button popup__button" type="submit">
+    <form className="form" onSubmit={handleSubmit}>
+      <input
+        className="form__input"
+        placeholder="Enlace del avatar"
+        type="url"
+        required
+        value={avatar}
+        onChange={(e) => setAvatar(e.target.value)}
+      />
+      <span className="form__input-error"></span>
+
+      <button className="form__submit" type="submit">
         Guardar
       </button>
     </form>
   );
 }
+

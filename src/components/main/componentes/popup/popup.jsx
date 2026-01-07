@@ -1,19 +1,19 @@
 import React from "react";
-import "../../../../../blocks/modal.css";
+import "../../../../blocks/modal.css";
 
-export default function Popup(props) {
-  const { onClose, title, children } = props;
-
+export default function Popup({ isOpen, onClose, title, children }) {
   return (
-    <div className="popup popup_open">
-      <div className="popup__content">
+    <div className={`popup ${isOpen ? "popup_opened" : ""}`}>
+      <div className="popup__container">
         <button
-          aria-label="Close modal"
-          className="popup__close"
           type="button"
+          className="popup__close"
+          aria-label="Cerrar"
           onClick={onClose}
-        />
-        <h3 className="popup__title">{title}</h3>
+        ></button>
+
+        {title && <h3 className="popup__title">{title}</h3>}
+
         {children}
       </div>
     </div>
