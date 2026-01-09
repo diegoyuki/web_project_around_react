@@ -9,18 +9,17 @@ export default function EditAvatar({ onUpdateAvatar }) {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <form className="edit-avatar-form" onSubmit={handleSubmit}>
       <input
-        className="form__input"
+        className="form-validator__input"
         placeholder="Enlace del avatar"
         type="url"
-        required
         value={avatar}
         onChange={(e) => setAvatar(e.target.value)}
+        required
       />
-      <span className="form__input-error"></span>
 
-      <button className="form__submit" type="submit">
+      <button className="edit-avatar-form__submit" type="submit">
         Guardar
       </button>
     </form>

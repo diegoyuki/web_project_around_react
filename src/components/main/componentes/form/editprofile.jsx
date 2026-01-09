@@ -10,28 +10,28 @@ export default function EditProfile({ currentUser, onUpdateUser }) {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <form className="edit-form" onSubmit={handleSubmit}>
       <input
-        className="form__input"
+        className="edit-form__input"
+        placeholder="Nombre"
         minLength="2"
         maxLength="40"
-        required
         value={name}
         onChange={(e) => setName(e.target.value)}
+        required
       />
-      <span className="form__input-error"></span>
 
       <input
-        className="form__input"
+        className="edit-form__input"
+        placeholder="Acerca de mí"
         minLength="2"
         maxLength="200"
-        required
         value={about}
         onChange={(e) => setAbout(e.target.value)}
+        required
       />
-      <span className="form__input-error"></span>
 
-      <button className="form__submit" type="submit">
+      <button className="edit-form__submit" type="submit">
         Guardar
       </button>
     </form>

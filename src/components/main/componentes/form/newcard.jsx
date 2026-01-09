@@ -10,31 +10,30 @@ export default function NewCard({ onAddCard }) {
   }
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <form className="add-form" onSubmit={handleSubmit}>
       <input
-        className="form__input"
+        className="add-form__input"
         placeholder="Título"
         minLength="2"
         maxLength="30"
-        required
         value={name}
         onChange={(e) => setName(e.target.value)}
+        required
       />
-      <span className="form__input-error"></span>
 
       <input
-        className="form__input"
+        className="add-form__input"
         placeholder="Enlace de la imagen"
         type="url"
-        required
         value={link}
         onChange={(e) => setLink(e.target.value)}
+        required
       />
-      <span className="form__input-error"></span>
 
-      <button className="form__submit" type="submit">
+      <button className="modal__save" type="submit">
         Crear
       </button>
     </form>
   );
 }
+

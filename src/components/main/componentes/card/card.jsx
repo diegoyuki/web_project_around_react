@@ -5,10 +5,8 @@ import likeInactive from "../../../../images/heartbutton.svg";
 import likeActive from "../../../../images/heartactive.png";
 import deleteIcon from "../../../../images/delete.svg";
 
-export default function Card(props) {
-  const { card, onImageClick, onDelete } = props;
-  const { name, link, isLiked, _id } = card;
-
+export default function Card({ card, onImageClick, onDelete }) {
+  const { name, link, isLiked } = card;
   const [liked, setLiked] = useState(isLiked);
 
   function handleLikeClick() {
@@ -16,17 +14,15 @@ export default function Card(props) {
   }
 
   function handleDeleteClick() {
-  onDelete(card);
-}
+    onDelete(card); // 👉 confirmación en Main
+  }
 
-  const imageComponent = {
-    title: null,
-    children: <ImagePopup card={card} />,
-  };
+  function handleImageClick() {
+    onImageClick(card); // 👉 SOLO manda la card
+  }
 
   return (
     <article className="gallery__item">
-      {/* PAPELERA */}
       <button
         className="card__delete-button"
         type="button"
@@ -35,27 +31,24 @@ export default function Card(props) {
         <img src={deleteIcon} alt="Eliminar tarjeta" />
       </button>
 
-      {/* IMAGEN */}
       <img
         className="gallery__image"
         src={link}
         alt={name}
-        onClick={() => onImageClick(imageComponent)}
+        onClick={handleImageClick}
       />
 
       <div className="gallery__info">
         <h2 className="gallery__title">{name}</h2>
 
-        {/* LIKE */}
         <button
           className="gallery__button_like"
           type="button"
-          aria-label="Like"
           onClick={handleLikeClick}
         >
           <img
             src={liked ? likeActive : likeInactive}
-            alt={liked ? "Quitar me gusta" : "Me gusta"}
+            alt="Like"
           />
         </button>
       </div>
