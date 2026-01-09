@@ -64,7 +64,7 @@ export default function Main() {
     setSelectedCard(null);
   }
 
-  /* 👤 PERFIL */
+  /* PERFIL */
   function handleUpdateUser({ name, about }) {
     setCurrentUser((prev) => ({ ...prev, name, about }));
     closeAllPopups();
@@ -75,7 +75,7 @@ export default function Main() {
     closeAllPopups();
   }
 
-  /* 🖼️ TARJETAS */
+  /* TARJETAS */
   function handleAddCard({ name, link }) {
     setCards([{ _id: Date.now().toString(), name, link, isLiked: false }, ...cards]);
     closeAllPopups();

@@ -14,11 +14,11 @@ export default function Card({ card, onImageClick, onDelete }) {
   }
 
   function handleDeleteClick() {
-    onDelete(card); // 👉 confirmación en Main
+    onDelete(card); 
   }
 
   function handleImageClick() {
-    onImageClick(card); // 👉 SOLO manda la card
+    onImageClick(card); 
   }
 
   return (
