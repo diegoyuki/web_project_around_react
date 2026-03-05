@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import Popup from "./componentes/popup/popup.jsx";
 import ImagePopup from "./componentes/ImagePopup/ImagePopup.jsx";
 import NewCard from "./componentes/form/newcard.jsx";
@@ -7,92 +7,78 @@ import EditAvatar from "./componentes/form/editavatar.jsx";
 import ConfirmDelete from "./componentes/form/confirmdelete.jsx";
 import Card from "./componentes/card/card.jsx";
 import User from "./componentes/user/user.jsx";
-import avatarImage from "../../images/userimage.jpg";
-
-const initialCards = [
-  {
-    _id: "1",
-    name: "Yosemite Valley",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
-    isLiked: false,
-  },
-  {
-    _id: "2",
-    name: "Lake Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg",
-    isLiked: false,
-  },
-  {
-    _id: "3",
-    name: "Bald Mountains",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg",
-    isLiked: false,
-  },
-  {
-    _id: "4",
-    name: "Latemar",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg",
-    isLiked: false,
-  },
-  {
-    _id: "5",
-    name: "Vanoise National Park",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg",
-    isLiked: false,
-  },
-  {
-    _id: "6",
-    name: "Lago di Braies",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
-    isLiked: false,
-  },
-];
+import api from "../../utils/api.js";
+import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 
 export default function Main() {
-  const [cards, setCards] = useState(initialCards);
+  const { currentUser, handleUpdateUser } = useContext(CurrentUserContext);
+
+  const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const [selectedCard, setSelectedCard] = useState(null);
 
-  const [currentUser, setCurrentUser] = useState({
-    name: "Jacques Cousteau",
-    about: "Explorador",
-    avatar: avatarImage,
-  });
+  // =============================
+  // Cargar tarjetas
+  // =============================
+  useEffect(() => {
+    api.getInitialCards()
+      .then((data) => {
+        setCards(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   function closeAllPopups() {
     setPopup(null);
     setSelectedCard(null);
   }
 
-  /* PERFIL */
-  function handleUpdateUser({ name, about }) {
-    setCurrentUser((prev) => ({ ...prev, name, about }));
-    closeAllPopups();
-  }
-
-  function handleUpdateAvatar(avatar) {
-    setCurrentUser((prev) => ({ ...prev, avatar }));
-    closeAllPopups();
-  }
-
-  /* TARJETAS */
+  // =============================
+  // Agregar tarjeta
+  // =============================
   function handleAddCard({ name, link }) {
-    setCards([{ _id: Date.now().toString(), name, link, isLiked: false }, ...cards]);
-    closeAllPopups();
+    api.addCard({ name, link })
+      .then((newCard) => {
+        setCards((prevCards) => [newCard, ...prevCards]);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
   }
 
-  function handleDeleteClick(card) {
-    setPopup({
-      title: "¿Estás seguro?",
-      children: (
-        <ConfirmDelete
-          onConfirm={() => {
-            setCards((prev) => prev.filter((c) => c._id !== card._id));
-            closeAllPopups();
-          }}
-        />
-      ),
-    });
+  // =============================
+  // LIKE / UNLIKE
+  // =============================
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(
+      (user) => user._id === currentUser._id
+    );
+
+    const request = isLiked
+      ? api.unlikeCard(card._id)
+      : api.likeCard(card._id);
+
+    request
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) =>
+            c._id === card._id ? newCard : c
+          )
+        );
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // =============================
+  // ELIMINAR TARJETA
+  // =============================
+  function handleCardDelete(card) {
+    api.deleteCard(card._id)
+      .then(() => {
+        setCards((state) =>
+          state.filter((c) => c._id !== card._id)
+        );
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -106,8 +92,10 @@ export default function Main() {
             title: "Editar perfil",
             children: (
               <EditProfile
-                currentUser={currentUser}
-                onUpdateUser={handleUpdateUser}
+                onUpdateUser={(data) => {
+                  handleUpdateUser(data);
+                  closeAllPopups();
+                }}
               />
             ),
           })
@@ -115,13 +103,15 @@ export default function Main() {
         onEditAvatar={() =>
           setPopup({
             title: "Editar avatar",
-            children: <EditAvatar onUpdateAvatar={handleUpdateAvatar} />,
+            children: <EditAvatar />,
           })
         }
         onAddPlace={() =>
           setPopup({
             title: "Nuevo lugar",
-            children: <NewCard onAddCard={handleAddCard} />,
+            children: (
+              <NewCard onAddCard={handleAddCard} />
+            ),
           })
         }
       />
@@ -132,7 +122,8 @@ export default function Main() {
             key={card._id}
             card={card}
             onImageClick={setSelectedCard}
-            onDelete={handleDeleteClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
           />
         ))}
       </ul>
@@ -145,9 +136,9 @@ export default function Main() {
 
       {selectedCard && (
         <ImagePopup
-    card={selectedCard}
-    onClose={closeAllPopups}
-  />
+          card={selectedCard}
+          onClose={closeAllPopups}
+        />
       )}
     </main>
   );

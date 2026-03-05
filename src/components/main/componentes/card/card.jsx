@@ -1,24 +1,29 @@
-import { useState } from "react";
-import ImagePopup from "../ImagePopup/ImagePopup.jsx";
+import { useContext } from "react";
+import CurrentUserContext from "../../../../contexts/CurrentUserContext";
 
 import likeInactive from "../../../../images/heartbutton.svg";
 import likeActive from "../../../../images/heartactive.png";
 import deleteIcon from "../../../../images/delete.svg";
 
-export default function Card({ card, onImageClick, onDelete }) {
-  const { name, link, isLiked } = card;
-  const [liked, setLiked] = useState(isLiked);
+export default function Card({ card, onImageClick, onCardLike, onCardDelete }) {
+  const { name, link, likes } = card;
+
+  const currentUser = useContext(CurrentUserContext);
+
+  const isLiked = likes.some(
+    (user) => user._id === currentUser._id
+  );
 
   function handleLikeClick() {
-    setLiked((prev) => !prev);
+    onCardLike(card);
   }
 
   function handleDeleteClick() {
-    onDelete(card); 
+    onCardDelete(card);
   }
 
   function handleImageClick() {
-    onImageClick(card); 
+    onImageClick(card);
   }
 
   return (
@@ -47,7 +52,7 @@ export default function Card({ card, onImageClick, onDelete }) {
           onClick={handleLikeClick}
         >
           <img
-            src={liked ? likeActive : likeInactive}
+            src={isLiked ? likeActive : likeInactive}
             alt="Like"
           />
         </button>
