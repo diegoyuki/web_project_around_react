@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Header from "./components/header/header";
-import Main from "./components/main/main";
+import Main from "./components/main/Main";
 import Footer from "./components/footer/footer";
 import CurrentUserContext from "./contexts/CurrentUserContext";
 import api from "./utils/api";
