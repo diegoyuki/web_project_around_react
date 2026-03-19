@@ -6,13 +6,13 @@ import likeActive from "../../../../images/heartactive.png";
 import deleteIcon from "../../../../images/delete.svg";
 
 export default function Card({ card, onImageClick, onCardLike, onCardDelete }) {
-  const { name, link, likes } = card;
+  const { name, link, likes = [] } = card;
 
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
-  const isLiked = likes.some(
-    (user) => user._id === currentUser._id
-  );
+ const isLiked = likes.some(
+  (user) => user._id === currentUser?._id
+);
 
   function handleLikeClick() {
     onCardLike(card);

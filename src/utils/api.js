@@ -70,10 +70,10 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around-api.es.tripleten-services.com/v1/cohort-31",
+  baseUrl: 'https://around-api.es.tripleten-services.com/v1',
   headers: {
-    authorization: "15073ba9-f22b-4516-bfdd-0b57104467b1",
-    "Content-Type": "application/json"
+    authorization: '15073ba9-f22b-4516-bfdd-0b57104467b1',
+    "Content-Type": 'application/json'
   }
 });
 

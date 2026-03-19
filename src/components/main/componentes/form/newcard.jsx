@@ -1,16 +1,22 @@
 import { useState } from "react";
 
-export default function NewCard({ onAddCard }) {
+export default function NewCard({ onAddPlaceSubmit }) {
+
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    onAddCard({ name, link });
+
+    onAddPlaceSubmit({
+      name,
+      link
+    });
   }
 
   return (
     <form className="add-form" onSubmit={handleSubmit}>
+
       <input
         className="add-form__input"
         placeholder="Título"
@@ -33,7 +39,7 @@ export default function NewCard({ onAddCard }) {
       <button className="modal__save" type="submit">
         Crear
       </button>
+
     </form>
   );
 }
-

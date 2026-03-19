@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { useRef } from "react";
 
 export default function EditAvatar({ onUpdateAvatar }) {
-  const [avatar, setAvatar] = useState("");
+
+  const avatarRef = useRef();
 
   function handleSubmit(e) {
     e.preventDefault();
-    onUpdateAvatar(avatar);
+
+    onUpdateAvatar({
+      avatar: avatarRef.current.value
+    });
   }
 
   return (
@@ -14,8 +18,7 @@ export default function EditAvatar({ onUpdateAvatar }) {
         className="form-validator__input"
         placeholder="Enlace del avatar"
         type="url"
-        value={avatar}
-        onChange={(e) => setAvatar(e.target.value)}
+        ref={avatarRef}
         required
       />
 
