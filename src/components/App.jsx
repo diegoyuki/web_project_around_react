@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import Header from "./components/header/header";
-import Main from "./components/main/Main";
-import Footer from "./components/footer/footer";
-import CurrentUserContext from "./contexts/CurrentUserContext";
-import api from "./utils/api";
+import Header from "./header/header";
+import Main from "./Main/Main";
+import Footer from "./footer/footer";
+import CurrentUserContext from "../contexts/CurrentUserContext";
+import api from "../utils/api";
 
 function App() {
 
